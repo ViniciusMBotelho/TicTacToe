@@ -44,6 +44,9 @@ body {
   grid-template-columns: repeat(3, 1fr); /* 9 colunas com largura igual */
   grid-template-rows: repeat(3, 1fr); /* Altura das linhas ajustável */
   gap: 2px;
+  pointer-events: none !important;
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
 }
 
 .line {

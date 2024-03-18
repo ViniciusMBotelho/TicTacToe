@@ -1,10 +1,12 @@
 var player = 1;
+var bigTable = ["", "", "", "", "", "", "", "", ""];
 
 function createBoard() {
   var contInput = 0;
   var board_container = document.getElementById("board-container");
+  // bigTable = ["", "", "", "", "", "", "", "", ""];
   for (var i = 0; i < 9; i++) {
-    var divTable = document.createElement("div");
+    var divTable = document.createElement("span");
     divTable.className = "table";
 
     for (var j = 0; j < 3; j++) {
@@ -39,6 +41,7 @@ function interaction() {
   nextTable(this);
   checkWinner(this);
   getBoardValues();
+  console.log(bigTable);
 }
 
 function checkWinner(inputClicked) {
@@ -51,13 +54,19 @@ function checkWinner(inputClicked) {
   });
 
   var winner = checkWinnerInMatrix(matriz);
+  var boards = document.querySelectorAll(".table");
+  var indiceTable = Array.from(boards).indexOf(tableHTMLClicked);
 
   if (winner !== null) {
-    alert("O jogador " + winner + " venceu!");
+    console.log(
+      "O jogador " + winner + " venceu a tabela " + indiceTable + "!"
+    );
+    bigTable[indiceTable] = winner;
+    tableHTMLClicked.className = "tableOff";
   } else {
-    var tie = checkTie();
+    var tie = checkTie(matriz);
     if (tie) {
-      alert("Empate!");
+      console.log("A tabela " + indiceTable + " empatou! ");
     }
   }
 }
@@ -93,17 +102,15 @@ function checkWinnerInMatrix(matriz) {
   return null;
 }
 
-function checkTie() {
-  var boards = document.querySelectorAll(".table");
-  for (let i = 0; i < boards.length; i++) {
-    var inputs = boards[i].querySelectorAll('input[type="button"]');
-    for (let j = 0; j < inputs.length; j++) {
-      if (inputs[j].value === "") {
-        return false;
-      }
+function checkTie(matriz) {
+  matriz.forEach((position) => {
+    if (position != "") {
+      console.log("embate");
+      return true;
     }
-  }
-  return true;
+  });
+  console.log("nao empatou");
+  return false;
 }
 
 function checkPlayer(thisInput) {
@@ -115,8 +122,18 @@ function checkPlayer(thisInput) {
 function nextTable(lastMove) {
   var focusTable = lastMove.id.slice(6) % 9;
   var index = 0;
+  var boards = document.querySelectorAll("span");
 
-  document.querySelectorAll(".table").forEach((board) => {
+  if (boards[focusTable].className == "tableOff") {
+    console.log("Este tabuleiro nao pode ser escolhido!");
+    boards.forEach((board) => {
+      board.style.pointerEvents = "auto";
+      board.style.opacity = 1;
+      board.style.cursor = "auto";
+    });
+    return getBoardValues()[focusTable];
+  }
+  boards.forEach((board) => {
     if (index != focusTable) {
       board.style.pointerEvents = "none";
       board.style.opacity = 0.5;
@@ -136,7 +153,7 @@ function nextTable(lastMove) {
 
 function getBoardValues() {
   var boardValues = [];
-  var boards = document.querySelectorAll(".table");
+  var boards = document.querySelectorAll("span");
 
   boards.forEach((board) => {
     var boardMatrix = [];
