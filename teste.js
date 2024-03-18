@@ -1,10 +1,12 @@
 var player = 1;
-var bigTable = ["", "", "", "", "", "", "", "", ""];
+var bigTable;
 
 function createBoard() {
   var contInput = 0;
   var board_container = document.getElementById("board-container");
-  // bigTable = ["", "", "", "", "", "", "", "", ""];
+  bigTable = ["X", "O", "Z", 
+              "X", "Z", "X", 
+              "Z", "X", "O"];
   for (var i = 0; i < 9; i++) {
     var divTable = document.createElement("span");
     divTable.className = "table";
@@ -41,6 +43,21 @@ function interaction() {
   checkWinner(this);
   nextTable(this);
   getBoardValues();
+  verifyBigTable();
+}
+
+function verifyBigTable() {
+  var bigTableWinner = checkWinnerInMatrix(bigTable)
+  if(bigTableWinner !== null){
+    console.log("O grande vencedor do tabuleiro é " + bigTableWinner)
+    //fazer alguma comemoração
+  }else {
+    var tie = checkTie(bigTable);
+    if (tie) {
+      console.log("Empatou!");
+    }
+  }
+
 }
 
 function checkWinner(inputClicked) {
@@ -53,7 +70,7 @@ function checkWinner(inputClicked) {
   });
 
   var winner = checkWinnerInMatrix(matriz);
-  var boards = document.querySelectorAll(".table");
+  var boards = document.querySelectorAll("span");
   var indiceTable = Array.from(boards).indexOf(tableHTMLClicked);
 
   if (winner !== null) {
@@ -61,12 +78,13 @@ function checkWinner(inputClicked) {
       "O jogador " + winner + " venceu a tabela " + indiceTable + "!"
     );
     bigTable[indiceTable] = winner;
-    console.log(tableHTMLClicked);
     tableHTMLClicked.className = "tableOff";
   } else {
     var tie = checkTie(matriz);
     if (tie) {
       console.log("A tabela " + indiceTable + " empatou! ");
+      tableHTMLClicked.className = "tableOff";
+      bigTable[indiceTable] = 'Z';
     }
   }
 }
@@ -103,12 +121,13 @@ function checkWinnerInMatrix(matriz) {
 }
 
 function checkTie(matriz) {
-  matriz.forEach((position) => {
-    if (position != "") {
-      return true;
+  var confirmation = true;
+  matriz.forEach((cell) => {
+    if (cell === "") {
+      confirmation = false;
     }
   });
-  return false;
+  return confirmation;
 }
 
 function checkPlayer(thisInput) {
