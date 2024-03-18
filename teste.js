@@ -38,10 +38,9 @@ function createBoard() {
 
 function interaction() {
   checkPlayer(this);
-  nextTable(this);
   checkWinner(this);
+  nextTable(this);
   getBoardValues();
-  console.log(bigTable);
 }
 
 function checkWinner(inputClicked) {
@@ -62,6 +61,7 @@ function checkWinner(inputClicked) {
       "O jogador " + winner + " venceu a tabela " + indiceTable + "!"
     );
     bigTable[indiceTable] = winner;
+    console.log(tableHTMLClicked);
     tableHTMLClicked.className = "tableOff";
   } else {
     var tie = checkTie(matriz);
@@ -105,11 +105,9 @@ function checkWinnerInMatrix(matriz) {
 function checkTie(matriz) {
   matriz.forEach((position) => {
     if (position != "") {
-      console.log("embate");
       return true;
     }
   });
-  console.log("nao empatou");
   return false;
 }
 
@@ -133,6 +131,7 @@ function nextTable(lastMove) {
     });
     return getBoardValues()[focusTable];
   }
+
   boards.forEach((board) => {
     if (index != focusTable) {
       board.style.pointerEvents = "none";
