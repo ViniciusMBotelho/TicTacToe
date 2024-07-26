@@ -4,9 +4,10 @@ var bigTable;
 function createBoard() {
   var contInput = 0;
   var board_container = document.getElementById("board-container");
-  bigTable = ["X", "O", "Z", 
-              "X", "Z", "X", 
-              "Z", "X", "O"];
+  bigTable = ["", "O", "", 
+              "", "Z", "", 
+              "", "O", ""];
+              
   for (var i = 0; i < 9; i++) {
     var divTable = document.createElement("span");
     divTable.className = "table";
@@ -44,6 +45,7 @@ function interaction() {
   nextTable(this);
   getBoardValues();
   verifyBigTable();
+  console.log(switchValue())
 }
 
 function verifyBigTable() {
@@ -58,6 +60,27 @@ function verifyBigTable() {
     }
   }
 
+}
+
+function switchValue() {
+  var alterBigTableX = bigTable.slice()
+  var alterBigTableO = bigTable.slice()
+  
+  for(let i = 0; i < 8; i++){
+    if(alterBigTableO[i] === 'Z')
+      alterBigTableO[i] = 'O'
+  }
+
+  for(let i = 0; i < 8; i++){
+    if(alterBigTableX[i] === 'Z')
+      alterBigTableX[i] = 'X'
+  }
+
+  if(checkWinnerInMatrix(alterBigTableO) && checkWinnerInMatrix(alterBigTableX)){
+    console.log("Unique Exception here :o")
+  }
+
+  return checkWinnerInMatrix(alterBigTableO) ? alterBigTableO : alterBigTableX
 }
 
 function checkWinner(inputClicked) {
