@@ -4,9 +4,9 @@ var bigTable;
 function createBoard() {
   var contInput = 0;
   var board_container = document.getElementById("board-container");
-  bigTable = ["", "O", "", 
-              "", "Z", "", 
-              "", "O", ""];
+  bigTable = ["", "", "", 
+              "", "", "", 
+              "", "", ""];
               
   for (var i = 0; i < 9; i++) {
     var divTable = document.createElement("span");
@@ -45,24 +45,16 @@ function interaction() {
   nextTable(this);
   getBoardValues();
   verifyBigTable();
-  console.log(switchValue())
 }
 
 function verifyBigTable() {
-  var bigTableWinner = checkWinnerInMatrix(bigTable)
-  if(bigTableWinner !== null){
-    console.log("O grande vencedor do tabuleiro é " + bigTableWinner)
-    //fazer alguma comemoração
-  }else {
-    var tie = checkTie(bigTable);
-    if (tie) {
-      console.log("Empatou!");
-    }
-  }
+  var bigTableChanged = switchValueZ()
 
+  if(bigTableChanged != null && bigTableChanged != "TIEX") console.log("O grande vencedor do tabuleiro é " + bigTableChanged)
+  else if(checkTie(bigTable) || bigTableChanged == "TIEX") console.log("A grande tabela nao possui vencedor")
 }
 
-function switchValue() {
+function switchValueZ() {
   var alterBigTableX = bigTable.slice()
   var alterBigTableO = bigTable.slice()
   
@@ -75,24 +67,24 @@ function switchValue() {
     if(alterBigTableX[i] === 'Z')
       alterBigTableX[i] = 'X'
   }
-
-  if(checkWinnerInMatrix(alterBigTableO) && checkWinnerInMatrix(alterBigTableX)){
-    console.log("Unique Exception here :o")
-  }
-
-  return checkWinnerInMatrix(alterBigTableO) ? alterBigTableO : alterBigTableX
+  
+  if(checkWinnerInMatrix(alterBigTableO) == checkWinnerInMatrix(alterBigTableX)) return checkWinnerInMatrix(bigTable)
+  else if(checkWinnerInMatrix(alterBigTableO) && checkWinnerInMatrix(alterBigTableX)) return "TIEX"
+  else if(checkWinnerInMatrix(alterBigTableO)) return 'O'
+  else if(checkWinnerInMatrix(alterBigTableX)) return 'X'
+  return null
 }
 
 function checkWinner(inputClicked) {
   var tableHTMLClicked = inputClicked.parentElement.parentElement;
-  var matriz = [];
+  var matrix = [];
 
   let inputs = tableHTMLClicked.querySelectorAll('input[type="button"]');
   inputs.forEach((input) => {
-    matriz.push(input.value);
+    matrix.push(input.value);
   });
 
-  var winner = checkWinnerInMatrix(matriz);
+  var winner = checkWinnerInMatrix(matrix);
   var boards = document.querySelectorAll("span");
   var indiceTable = Array.from(boards).indexOf(tableHTMLClicked);
 
@@ -103,7 +95,7 @@ function checkWinner(inputClicked) {
     bigTable[indiceTable] = winner;
     tableHTMLClicked.className = "tableOff";
   } else {
-    var tie = checkTie(matriz);
+    var tie = checkTie(matrix);
     if (tie) {
       console.log("A tabela " + indiceTable + " empatou! ");
       tableHTMLClicked.className = "tableOff";
@@ -112,40 +104,40 @@ function checkWinner(inputClicked) {
   }
 }
 
-function checkWinnerInMatrix(matriz) {
+function checkWinnerInMatrix(matrix) {
   for (let i = 0; i < 3; i++) {
     if (
-      matriz[i * 3] === matriz[i * 3 + 1] &&
-      matriz[i * 3] === matriz[i * 3 + 2] &&
-      matriz[i * 3] !== ""
+      matrix[i * 3] === matrix[i * 3 + 1] &&
+      matrix[i * 3] === matrix[i * 3 + 2] &&
+      matrix[i * 3] !== ""
     ) {
-      return matriz[i * 3];
+      return matrix[i * 3];
     }
   }
 
   for (let i = 0; i < 3; i++) {
     if (
-      matriz[i] === matriz[i + 3] &&
-      matriz[i] === matriz[i + 6] &&
-      matriz[i] !== ""
+      matrix[i] === matrix[i + 3] &&
+      matrix[i] === matrix[i + 6] &&
+      matrix[i] !== ""
     ) {
-      return matriz[i];
+      return matrix[i];
     }
   }
 
   if (
-    (matriz[0] === matriz[4] && matriz[0] === matriz[8] && matriz[0] !== "") ||
-    (matriz[2] === matriz[4] && matriz[2] === matriz[6] && matriz[2] !== "")
+    (matrix[0] === matrix[4] && matrix[0] === matrix[8] && matrix[0] !== "") ||
+    (matrix[2] === matrix[4] && matrix[2] === matrix[6] && matrix[2] !== "")
   ) {
-    return matriz[4];
+    return matrix[4];
   }
 
   return null;
 }
 
-function checkTie(matriz) {
+function checkTie(matrix) {
   var confirmation = true;
-  matriz.forEach((cell) => {
+  matrix.forEach((cell) => {
     if (cell === "") {
       confirmation = false;
     }
