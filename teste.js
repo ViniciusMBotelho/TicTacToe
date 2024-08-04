@@ -47,11 +47,23 @@ function interaction() {
   verifyBigTable();
 }
 
+function gameOver(){
+  const allTables = [...document.querySelectorAll('span.table')];
+  allTables.forEach((table) => {
+    table.className = "tableOff"
+  })
+}
+
 function verifyBigTable() {
   var bigTableChanged = switchValueZ()
-
-  if(bigTableChanged != null && bigTableChanged != "TIEX") console.log("O grande vencedor do tabuleiro é " + bigTableChanged)
-  else if(checkTie(bigTable) || bigTableChanged == "TIEX") console.log("A grande tabela nao possui vencedor")
+  if(bigTableChanged != null && bigTableChanged != "TIEX") {
+    console.log("O grande vencedor do tabuleiro é " + bigTableChanged)
+    gameOver()
+  }
+  else if(checkTie(bigTable) || bigTableChanged == "TIEX"){
+    console.log("A grande tabela nao possui vencedor")
+    gameOver()
+  } 
 }
 
 function switchValueZ() {
