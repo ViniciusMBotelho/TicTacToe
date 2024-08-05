@@ -39,6 +39,27 @@ function createBoard() {
   });
 }
 
+function createLog(message){
+  var logDiv = document.getElementById('log');
+  var existingParagraphs = logDiv.getElementsByTagName('p');
+
+  for (var i = 0; i < existingParagraphs.length; i++) {
+    existingParagraphs[i].style.animation = 'slideUpOut 1s ease-in forwards';
+    existingParagraphs[i].style.animation = 'vanish 1s ease-in forwards';
+  }
+
+  var paragrafo = document.createElement('p');
+  paragrafo.textContent = message;
+  
+  logDiv.appendChild(paragrafo);
+  logDiv.style.overflow = "visible"
+  
+}
+
+// setInterval(() => {
+//   createLog('Nova mensagem: ' + new Date().toLocaleTimeString());
+// }, 5000);
+
 function interaction() {
   checkPlayer(this);
   checkWinner(this);
@@ -58,10 +79,12 @@ function verifyBigTable() {
   var bigTableChanged = switchValueZ()
   if(bigTableChanged != null && bigTableChanged != "TIEX") {
     console.log("O grande vencedor do tabuleiro é " + bigTableChanged)
+    createLog('O grande vencedor do tabuleiro é ' + bigTableChanged)
     gameOver()
   }
   else if(checkTie(bigTable) || bigTableChanged == "TIEX"){
     console.log("A grande tabela nao possui vencedor")
+    createLog('A grande tabela nao possui vencedor')
     gameOver()
   } 
 }
@@ -101,15 +124,15 @@ function checkWinner(inputClicked) {
   var indiceTable = Array.from(boards).indexOf(tableHTMLClicked);
 
   if (winner !== null) {
-    console.log(
-      "O jogador " + winner + " venceu a tabela " + indiceTable + "!"
-    );
+    console.log("O jogador " + winner + " venceu a tabela " + indiceTable + "!")
+    createLog("O jogador " + winner + " venceu a tabela " + indiceTable + "!")
     bigTable[indiceTable] = winner;
     tableHTMLClicked.className = "tableOff";
   } else {
     var tie = checkTie(matrix);
     if (tie) {
       console.log("A tabela " + indiceTable + " empatou! ");
+      createLog("A tabela " + indiceTable + " empatou! ")
       tableHTMLClicked.className = "tableOff";
       bigTable[indiceTable] = 'Z';
     }
@@ -214,7 +237,7 @@ function getBoardValues() {
 }
 
 function startGame() {
-  createBoard();
-}
+  createBoard()
+} 
 
 startGame();
