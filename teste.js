@@ -124,8 +124,8 @@ function checkWinner(inputClicked) {
   var indiceTable = Array.from(boards).indexOf(tableHTMLClicked);
 
   if (winner !== null) {
-    console.log("O jogador " + winner + " venceu a tabela " + indiceTable + "!")
-    createLog("O jogador " + winner + " venceu a tabela " + indiceTable + "!")
+    console.log("O jogador " + winner + " venceu a tabela " + (indiceTable+1) + "!")
+    createLog("O jogador " + winner + " venceu a tabela " + (indiceTable+1) + "!")
     bigTable[indiceTable] = winner;
     tableHTMLClicked.className = "tableOff";
   } else {
